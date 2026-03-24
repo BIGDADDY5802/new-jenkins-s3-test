@@ -27,6 +27,6 @@ resource "aws_s3_bucket" "frontend" {
   
 
   tags = {
-    Name = "Jenkins Bucket-a"
+    Name = "Jenkins Bucket"
   }
 }
