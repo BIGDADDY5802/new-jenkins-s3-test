@@ -69,7 +69,7 @@ git push origin main
 
 Option B:
 - GitHub → Webhook → Recent Deliveries
-- Redeliver
+- Redeliver!
 
 ---
 
