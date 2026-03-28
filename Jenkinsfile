@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-     triggers {
+    triggers {
         githubPush()
     }
 
@@ -19,16 +19,26 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                sh 'terraform init'
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-iam-user-creds'
+                ]]) {
+                    sh 'terraform init'
+                }
             }
         }
 
         stage('Terraform Apply') {
             steps {
-                sh '''
-                    terraform plan -out=tfplan
-                    terraform apply -auto-approve tfplan
-                '''
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-iam-user-creds'
+                ]]) {
+                    sh '''
+                        terraform plan -out=tfplan
+                        terraform apply -auto-approve tfplan
+                    '''
+                }
             }
         }
 
@@ -47,7 +57,12 @@ pipeline {
                         ]
                     )
                     if (destroyChoice == 'yes') {
-                        sh 'terraform destroy -auto-approve'
+                        withCredentials([[
+                            $class: 'AmazonWebServicesCredentialsBinding',
+                            credentialsId: 'aws-iam-user-creds'
+                        ]]) {
+                            sh 'terraform destroy -auto-approve'
+                        }
                     } else {
                         echo "Skipping destroy"
                     }
