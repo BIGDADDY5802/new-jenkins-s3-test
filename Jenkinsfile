@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    // tools {
-    //     snyk 'snyk'  // triggers binary download — must match Global Tool Config name
-    // }
-
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
         TF_IN_AUTOMATION   = 'true'
